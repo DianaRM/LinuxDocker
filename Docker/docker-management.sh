@@ -67,7 +67,21 @@ run_container(){
 }
 
 run_yml(){
-    echo "un archivo"
+    read -p "Ingrese la ruta de la carpeta  " ruta_carpeta
+    
+    docker-compose up -d
+
+
+    status=$?
+
+    if [ $status -eq 0 ]
+    then 
+        echo "Docker compose corrio exitosamente"
+    else
+        echo "No se corrio exitosamente el DOocker compose"
+    fi
+
+    read -n 1 -s -r -p "Presione enter para continuar"
 }
 
 
@@ -115,6 +129,34 @@ remove_containers(){
         echo "Se ha elimando el contenedor exitosamente"
     else
         echo "No se ha elimando el contenedor"
+    fi
+
+    read -n 1 -s -r -p "Presione enter para continuar"
+}
+
+
+list_docker-compose(){
+    printf "%s\n" "Esta es la lista de contonedores desplegados por el docker-compose"
+    docker-compose ps
+
+    read -n 1 -s -r -p "Presione enter para continuar"
+
+}
+
+remove_docker-compuse(){
+    read -p "Ingrese la ruta donde se encuentra el yml file " ruta
+    cd $ruta
+    #ELimina todos los contenedores desplegados en el yml file 
+    # -- rmi elimina todas las imagenes asociadoas a esos contenedores
+    docker-compose down --rmi all --volumes 
+
+    status=$?
+
+    if [ $status -eq 0 ]
+    then 
+        echo "Se ha elimando el docker-compose"
+    else
+        echo "No se ha elimando el docker-compose"
     fi
 
     read -n 1 -s -r -p "Presione enter para continuar"
