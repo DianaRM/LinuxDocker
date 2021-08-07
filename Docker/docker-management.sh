@@ -68,10 +68,8 @@ run_container(){
 
 run_yml(){
     read -p "Ingrese la ruta de la carpeta  " ruta_carpeta
-    
+    cd $ruta_carpeta
     docker-compose up -d
-
-
     status=$?
 
     if [ $status -eq 0 ]
