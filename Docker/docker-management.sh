@@ -1,9 +1,9 @@
 #! /bin/bash
 
 build_image(){
-    read -p "Ingrese la ruta del docker file " ruta
-    read -p "Ingrese el nombre de la imagen " nombre_imagen
-    read -p "Ingrese la version de la imagen " version
+    read -p "Ingrese la ruta del docker file  " ruta
+    read -p "Ingrese el nombre de la imagen  " nombre_imagen
+    read -p "Ingrese la version de la imagen  " version
 
     printf "%s\n" "Entrando a la ruta $ruta"
     printf "%s\n" "Ejecutando docker build"
@@ -43,10 +43,10 @@ pull_image(){
 }
 
 run_container(){
-    read -p "Ingrese el nombre del contenedor" nombre_container
-    read -p "Ingrese el puerto en el host" puerto_host
-    read -p "Ingrese el puerto en el contenedor" puerto_container
-    read -p "Ingrese el nombre de la imagen" nombre_image
+    read -p "Ingrese el nombre del contenedor  " nombre_container
+    read -p "Ingrese el puerto en el host  " puerto_host
+    read -p "Ingrese el puerto en el contenedor  " puerto_container
+    read -p "Ingrese el nombre de la imagen  " nombre_image
 
     docker run --name $nombre_container -d -p $puerto_host:$puerto_container $nombre_image
 
@@ -128,7 +128,7 @@ remove_containers(){
 
 
 list_docker_compose(){
-    read -p "Ingrese la ruta donde se encuentra el archivo yml" ruta
+    read -p "Ingrese la ruta donde se encuentra el archivo yml  " ruta
     printf "%s\n" "Esta es la lista de contonedores desplegados por el docker-compose"
     cd $ruta
     docker-compose ps
@@ -137,7 +137,7 @@ list_docker_compose(){
 }
 
 remove_docker_compose(){
-    read -p "Ingrese la ruta donde se encuentra el yml file " ruta
+    read -p "Ingrese la ruta donde se encuentra el yml file  " ruta
     cd $ruta
     #ELimina todos los contenedores desplegados en el yml file 
     # -- rmi elimina todas las imagenes asociadoas a esos contenedores
@@ -174,8 +174,8 @@ while :
     echo "6. Eliminar una imagen"
     echo "7. Listar los contenedores"
     echo "8. Eliminar un contenedor"
-    echo "9. Listar los contenedores desplegados "
-    echo "10. Eliminar el contenedor "
+    echo "9. Listar los contenedores desplegados por docker-compose "
+    echo "10. Eliminar el contenedor desplegado por docker-compose"
     echo "11. Salir"
 
 do :
