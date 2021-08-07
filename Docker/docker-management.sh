@@ -1,15 +1,165 @@
-#!/bin/bash
+#! /bin/bash
+
+build_image(){
+    read -p "Ingrese la ruta del docker file " ruta
+    read -p "Ingrese el nombre de la imagen " nombre_imagen
+    read -p "Ingrese la version de la imagen " version
+
+    printf "%s\n" "Entrando a la ruta $ruta"
+    printf "%s\n" "Ejecutando docker build"
+
+
+    cd $ruta
+    pwd
+
+    docker build -t $nombre_imagen:$version .
+
+    status=$?
+
+    if [ $status -eq 0 ]
+    then 
+        echo "La imagen se ha creado exitosamente"
+    else
+        echo "NO se creo exitosamente la imagen"
+    fi
+
+    read -n 1 -s -r -p "Presione enter para continuar"
+
+}
+
+
+pull_image(){
+    url=""
+    read -p "Ingresa la URL de la imagen " url
+    docker pull $url
+
+    status=$?
+
+    if [ $status -eq 0 ]
+    then 
+        echo "La imagen se ha descargado exitosamente"
+    else
+        echo "No se descargo exitosamente la imagen"
+    fi
+
+    read -n 1 -s -r -p "Presione enter para continuar"
+}
+
+run_container(){
+    read -p "Ingrese el nombre del contenedor" nombre_container
+    read -p "Ingrese el puerto en el host" puerto_host
+    read -p "Ingrese el puerto en el contenedor" puerto_container
+    read -p "Ingrese el nombre de la imagen" nombre_image
+
+
+    docker run --name $nombre_container -d -p $puerto_host:$puerto_container $nombre_image
+
+    status=$?
+
+    if [ $status -eq 0 ]
+    then 
+        echo "El contenedor se ha desplegado exitosamente"
+    else
+        echo "No se ha desplegado exitosamente"
+    fi
+
+    read -n 1 -s -r -p "Presione enter para continuar"
+}
+
+run_yml(){
+    echo "un archivo"
+}
+
+
+list_images(){
+    printf "%s\n" "Estas es la lista de images: "
+    docker images
+    read -n 1 -s -r -p "Presione enter para continuar"
+
+}
+
+remove_images(){
+    read -p "Ingrese el id de la imagen  " id_image
+    docker image rmi $id_image 
+
+    #$?: guarda la salida del ultimo comando utilizado, 0 si es exitoso y 1 si es fallido  
+    status=$?
+
+    if [ $status -eq 0 ]
+    then 
+        echo "Se ha elimando la imagen existosamente"
+    else
+        echo "No se ha elimando la imagen"
+    fi
+
+    read -n 1 -s -r -p "Presione enter para continuar"
+}
+
+list_containers(){
+    printf "%s\n" "Estas es la lista de contenedores: "
+    docker container ps -a 
+
+    read -n 1 -s -r -p "Presione enter para continuar"
+
+}
+
+remove_containers(){
+    read -p "Ingrese el id del contenedor  " id_container
+    docker container stop $id_container
+    docker container rm $id_container
+
+    status=$?
+
+    if [ $status -eq 0 ]
+    then 
+        echo "Se ha elimando el contenedor exitosamente"
+    else
+        echo "No se ha elimando el contenedor"
+    fi
+
+    read -n 1 -s -r -p "Presione enter para continuar"
+}
+
+
 opcion=0
 while :
+#Limpiar la pantalla
+    clear
+    #Desplegar el menú de opciones
+    echo "_______________"
+    echo "             DOCKER MANAGEMENT           "
+    echo "_______________"
+    echo "                MENÚ PRINCIPAL           "
+    echo "_______________"
+    echo "1. Construir una imagen"
+    echo "2. Descargar una imagen"
+    echo "3. Levantar un contenedor"
+    echo "4. Levantar un docker compose"
+    echo "5. Listar las imagenes"
+    echo "6. Eliminar una imagen"
+    echo "7. Listar los contenedores"
+    echo "8. Eliminar un contenedor"
+    echo "9. Salir"
+
 do :
-    read -p "Por favor ingrese una opcion [1-4]" opcion
+    read -p "Por favor ingrese una opcion [1-9] " opcion
 
     case $opcion in
-        1) echo "build image"
-        2) echo "pull image"
-        3) echo "run container"
-        4) echo "run yml"
-        5) echo "Salir"
+
+        1) printf "%s\n" "Construyendo imagen..."
+           build_image 
+           ;;
+        2) pull_image;;
+        3) run_container;;
+        4) run_yml;;
+        5) list_images;;
+        6) remove_images;;
+        7) list_containers;;
+        8) remove_containers;;
+        9) echo "Salir"
             exit 0
+            ;;
+
+    esac
 
 done
