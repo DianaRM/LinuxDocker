@@ -8,10 +8,8 @@ build_image(){
     printf "%s\n" "Entrando a la ruta $ruta"
     printf "%s\n" "Ejecutando docker build"
 
-
     cd $ruta
     pwd
-
     docker build -t $nombre_imagen:$version .
 
     status=$?
@@ -24,7 +22,6 @@ build_image(){
     fi
 
     read -n 1 -s -r -p "Presione enter para continuar"
-
 }
 
 
@@ -50,7 +47,6 @@ run_container(){
     read -p "Ingrese el puerto en el host" puerto_host
     read -p "Ingrese el puerto en el contenedor" puerto_container
     read -p "Ingrese el nombre de la imagen" nombre_image
-
 
     docker run --name $nombre_container -d -p $puerto_host:$puerto_container $nombre_image
 
@@ -87,7 +83,6 @@ list_images(){
     printf "%s\n" "Estas es la lista de images: "
     docker images
     read -n 1 -s -r -p "Presione enter para continuar"
-
 }
 
 remove_images(){
@@ -112,7 +107,6 @@ list_containers(){
     docker container ps -a 
 
     read -n 1 -s -r -p "Presione enter para continuar"
-
 }
 
 remove_containers(){
@@ -133,15 +127,16 @@ remove_containers(){
 }
 
 
-list_docker-compose(){
+list_docker_compose(){
+    read -p "Ingrese la ruta donde se encuentra el archivo yml" ruta
     printf "%s\n" "Esta es la lista de contonedores desplegados por el docker-compose"
+    cd $ruta
     docker-compose ps
 
     read -n 1 -s -r -p "Presione enter para continuar"
-
 }
 
-remove_docker-compuse(){
+remove_docker_compose(){
     read -p "Ingrese la ruta donde se encuentra el yml file " ruta
     cd $ruta
     #ELimina todos los contenedores desplegados en el yml file 
@@ -179,27 +174,37 @@ while :
     echo "6. Eliminar una imagen"
     echo "7. Listar los contenedores"
     echo "8. Eliminar un contenedor"
-    echo "9. Salir"
+    echo "9. Listar los contenedores desplegados "
+    echo "10. Eliminar el contenedor "
+    echo "11. Salir"
 
 do :
     read -p "Por favor ingrese una opcion [1-9] " opcion
 
     case $opcion in
 
-        1) printf "%s\n" "Construyendo imagen..."
-           build_image 
+        1) build_image 
            ;;
-        2) pull_image;;
-        3) run_container;;
-        4) run_yml;;
-        5) list_images;;
-        6) remove_images;;
-        7) list_containers;;
-        8) remove_containers;;
-        9) echo "Salir"
+        2) pull_image
+            ;;
+        3) run_container
+            ;;
+        4) run_yml
+            ;;
+        5) list_images
+            ;;
+        6) remove_images
+            ;;
+        7) list_containers
+            ;;
+        8) remove_containers
+            ;;
+        9) list_docker_compose
+            ;;
+        10) remove_docker_compose
+            ;;
+        11) echo "Salir"
             exit 0
             ;;
-
     esac
-
 done
